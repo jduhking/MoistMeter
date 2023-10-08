@@ -74,7 +74,7 @@ function uploadFileToDatabase(isSensor1) {
 
     try {
       db = client.db(databaseName)
-      db.collection(collection_name).insertMany(parsedData)
+      db.collection(collection_name).insertOne({data: [parsedData]})
 
     } catch(err){
       console.log(err)
