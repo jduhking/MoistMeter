@@ -23,7 +23,7 @@ mqtt_password = MQTT_BROKER_PWORD
 mqtt_publish_topic = "moistsensor"  # The MQTT topic for your Adafruit IO Feed
 
 # Enter a random ID for this MQTT Client
-# It needs to be globally unique across all of Adafruit IO.
+# It needs to be globally unique
 mqtt_client_id = "wood_sensor_client"
 
 
@@ -37,7 +37,7 @@ def connect_to_wifi():
     wlan.active(True)
     wlan.connect(wifi_ssid, wifi_password)
     while wlan.isconnected() == False:
-        #print('Waiting for connection...')
+        print('Waiting for connection...')
         sleep(1)
     print("Connected to WiFi")
 
@@ -66,8 +66,6 @@ def get_moisture_data(sensor):
         moisture = 0
     elif moisture > 100:
         moisture = 100
-    
-    print("moisture: " + "%.2f" % moisture +"% (adc: "+str(sensor.read_u16())+")")
     return moisture
 
 
@@ -80,14 +78,15 @@ try:
         moisture_data1 = get_moisture_data(sensor1)
         moisture_data2 = get_moisture_data(sensor2)
         
-        print(f'Publish {moisture:.2f}')
+        print(f'Publish {moisture_data1:.2f}, {moisture_data2:.2f}')
         data = str(moisture_data1) + " " + str(moisture_data2)
         mqtt_client.publish(mqtt_publish_topic, data)
         
         # Delay a bit to avoid hitting the rate limit
-        sleep(2)
+        sleep(1)
 except Exception as e:
     print(f'Failed to publish message: {e}')
 finally:
     mqtt_client.disconnect()
+
 
