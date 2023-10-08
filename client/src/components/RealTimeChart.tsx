@@ -7,9 +7,18 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Chart({ data }) {
+type ChartData = {
+  xAxis: number;
+  yAxisData: number;
+};
+
+interface ChartProps {
+  data: ChartData[];
+}
+
+export default function Chart({ data }: ChartProps) {
   const [barData, setBarData] = useState(data);
 
   useEffect(() => {

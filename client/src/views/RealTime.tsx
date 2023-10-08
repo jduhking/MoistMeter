@@ -17,52 +17,6 @@ const initialData: ChartData[] = [
   },
 ];
 
-const fakeData: ChartData[] = [
-  {
-    xAxis: 1,
-    yAxisData: 0,
-  },
-  {
-    xAxis: 2,
-    yAxisData: 1,
-  },
-  {
-    xAxis: 3,
-    yAxisData: 2,
-  },
-  {
-    xAxis: 4,
-    yAxisData: 3,
-  },
-  {
-    xAxis: 5,
-    yAxisData: 4,
-  },
-  {
-    xAxis: 6,
-    yAxisData: 5,
-  },
-  {
-    xAxis: 7,
-    yAxisData: 6,
-  },
-  {
-    xAxis: 8,
-    yAxisData: 7,
-  },
-  {
-    xAxis: 9,
-    yAxisData: 8,
-  },
-  {
-    xAxis: 10,
-    yAxisData: 9,
-  },
-  {
-    xAxis: 11,
-    yAxisData: 10,
-  },
-];
 type Data = {
   sensor1: number;
   sensor2: number;
@@ -75,9 +29,12 @@ export default function RealTime() {
 
   useEffect(() => {
     if (!socket.hasListeners("moist-to-client")) {
-      socket.on("moist-to-client", (data: string) => {
-        data = JSON.parse(data as string);
+      socket.on("moist-to-client", (unparsedData: string) => {
+        const data: Data = JSON.parse(
+          unparsedData as string
+        ) as Data;
         console.log("data", data);
+
         setChartData1((prevChartData) => {
           const updatedChartData = [...prevChartData];
           if (updatedChartData.length >= 10) {
@@ -92,6 +49,7 @@ export default function RealTime() {
           });
           return updatedChartData;
         });
+
         setChartData2((prevChartData) => {
           const updatedChartData = [...prevChartData];
           if (updatedChartData.length >= 10) {
