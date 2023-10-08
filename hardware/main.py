@@ -4,31 +4,18 @@ from time import sleep
 from picozero import pico_temp_sensor, pico_led
 from config import MQTT_BROKER_URL, MQTT_BROKER_UNAME, MQTT_BROKER_PWORD
 from config import ssid, password
+from machine import ADC, Pin
+import utime
 import ussl
-"""
-A simple example that connects to the Adafruit IO MQTT server
-and publishes values that represent a sine wave
-"""
-
 import network
-import time
-from math import sin
 from umqtt import MQTTClient
 
-# Fill in your WiFi network name (ssid) and password here:
-wifi_ssid = ssid
-wifi_password = password
+#config for the wood
+wood = ADC(Pin(26))
+min_moisture=0
+max_moisture=65535
 
-# Connect to WiFi
-wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
-wlan.connect(wifi_ssid, wifi_password)
-while wlan.isconnected() == False:
-    #print('Waiting for connection...')
-    time.sleep(1)
-print("Connected to WiFi")
-
-# Fill in your Adafruit IO Authentication and Feed MQTT Topic details
+# Fill in your Authentication and Feed MQTT Topic details
 mqtt_host = MQTT_BROKER_URL
 mqtt_username = MQTT_BROKER_UNAME
 mqtt_password = MQTT_BROKER_PWORD
@@ -38,37 +25,56 @@ mqtt_publish_topic = "moistsensor"  # The MQTT topic for your Adafruit IO Feed
 # It needs to be globally unique across all of Adafruit IO.
 mqtt_client_id = "hardware_moist"
 
-# Initialize our MQTTClient and connect to the MQTT server
+def connect_to_wifi():
+    # Fill in your WiFi network name (ssid) and password here:
+    wifi_ssid = ssid
+    wifi_password = password
 
-mqtt_client = MQTTClient(
-        client_id=mqtt_client_id,
-        server=mqtt_host,
-        user=mqtt_username,
-        password=mqtt_password,
-        keepalive=3600,
-        ssl=True,
-        ssl_params={'server_hostname': mqtt_host}
-        )
+    # Connect to WiFi
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(wifi_ssid, wifi_password)
+    while wlan.isconnected() == False:
+        #print('Waiting for connection...')
+        sleep(1)
+    print("Connected to WiFi")
 
-mqtt_client.connect()
+def set_up_mqtt():
 
-# Publish a data point to the Adafruit IO MQTT server every 3 seconds
-# Note: Adafruit IO has rate limits in place, every 3 seconds is frequent
-#  enough to see data in realtime without exceeding the rate limit.
 
-counter = 0
+    # Initialize our MQTTClient and connect to the MQTT server
+
+    mqtt_client = MQTTClient(
+            client_id=mqtt_client_id,
+            server=mqtt_host,
+            user=mqtt_username,
+            password=mqtt_password,
+            keepalive=3600,
+            ssl=True,
+            ssl_params={'server_hostname': mqtt_host}
+            )
+
+    mqtt_client.connect()
+    return mqtt_client
+
+def get_moisture_data():
+    moisture=(max_moisture-wood.read_u16())*100/(max_moisture-min_moisture)
+    return moisture
+
+
 try:
+    connect_to_wifi()
+    mqtt_client = set_up_mqtt()
+    
     while True:
         # Generate some dummy data that changes every loop
-        sine = sin(counter)
-        counter += .8
+        moisture = get_moisture_data()
         
-        # Publish the data to the topic!
-        print(f'Publish {sine:.2f}')
-        mqtt_client.publish(mqtt_publish_topic, str(sine))
+        print(f'Publish {moisture:.2f}')
+        mqtt_client.publish(mqtt_publish_topic, str(moisture))
         
         # Delay a bit to avoid hitting the rate limit
-        time.sleep(3)
+        sleep(2)
 except Exception as e:
     print(f'Failed to publish message: {e}')
 finally:
