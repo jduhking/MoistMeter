@@ -1,22 +1,24 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const { time, timeStamp } = require("console");
+
+const databaseName = process.env.DATABASE_NAME
+const uri = process.env.MONGO_URI;
+const {MongoClient, ServerApiVersion} = require('mongodb')
 require('dotenv').config();
 const fs = require("fs");
-const uri = process.env.MONGO_URI;
+const { parse } = require("path");
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
+const client = new MongoClient(uri,  {
   serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
   }
 });
-  
-//Create a function that saves data to a temporary file, when the file reaches a certain size, it will be uploaded to the database
-//This is to prevent the database from being overloaded with data
-//The function will be called every time a message is recieved from the broker
+
+
 function saveDataToFile(moisture, isSensor1) {
+
     fileName = "./data1.json";
     if (!isSensor1) {
         fileName = "./data2.json";
@@ -43,7 +45,7 @@ function saveDataToFile(moisture, isSensor1) {
     console.log(diff);
     if (diff > 10000) {
         uploadFileToDatabase(isSensor1);
-        //Clear the file
+        // Clear the file
         fs.writeFileSync(fileName, "[]");
     }
 
@@ -51,14 +53,16 @@ function saveDataToFile(moisture, isSensor1) {
 
 //Create a function that uploads the data from the file to the database
 function uploadFileToDatabase(isSensor1) {
+
+
     let fileName = "./data1.json";
     if (!isSensor1) {
         fileName = "./data2.json";
     }
 
-    let collection_name = "sensor1";
+    let collection_name = process.env.MOISTURE1_COLLECTION_NAME;
     if (!isSensor1) {
-        collection_name = "sensor2";
+        collection_name = process.env.MOISTURE2_COLLECTION_NAME;
     }
 
     //Read the file
@@ -66,51 +70,18 @@ function uploadFileToDatabase(isSensor1) {
     //Parse the file
     let parsedData = JSON.parse(data);
     // Connect to the MongoDB cluster
-    client.connect(uri, { useUnifiedTopology: true })
-      .then((client) => {
-        console.log('Connected to MongoDB');
+    
 
-        // Get a reference to the database and collection
-        const db = client.db("moisture");
-        const collection = db.collection(collection_name);
+    try {
+      db = client.db(databaseName)
+      db.collection(collection_name).insertMany(parsedData)
 
-        // Insert the data into the collection
-        collection.insertMany(parsedData, (err, result) => {
-          if (err) {
-            console.error("Error inserting data into MongoDB:", err);
-          } else {
-            console.log("Number of documents inserted: " + result.insertedCount);
-          }
-
-          // Close the MongoDB client connection
-          client.close();
-        });
-      })
-      .catch((err) => {
-        console.error('Error connecting to MongoDB:', err);
-      });
-
-}
-
-// Function to save data to file and upload to MongoDB
-second = 0;
-function saveAndUploadData() {
-    saveDataToFile(10, true);
-    saveDataToFile(20, false);
-    second++;
-    console.log(second);
-}
-
-function sleep(num) {
-    let now = new Date();
-    let stop = now.getTime() + num;
-    while(true) {
-        now = new Date();
-        if(now.getTime() > stop) return;
+    } catch(err){
+      console.log(err)
     }
+
 }
 
-
-
-
-
+module.exports = {
+  saveDataToFile,
+}

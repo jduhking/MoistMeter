@@ -2,6 +2,7 @@ const mqtt = require("mqtt");
 require('dotenv').config()
 const fs = require("fs");
 const { parse } = require("path");
+const {saveDataToFile } = require('./mongodb')
 
 var options = {
   host: process.env.MQTT_BROKER_URL,
@@ -22,7 +23,6 @@ mqttClient.on("connect", function () {
   mqttClient.subscribe(topicName, function (err) {
     if (err) return console.log(err);
     console.log("Subscribed to topic: " + topicName);
-
   });
 });
 
@@ -32,8 +32,11 @@ mqttClient.on("connect", function () {
 mqttClient.on("message", function (topic, message) {
   const d = new Date();
   console.log("Message recieved! " + d.getSeconds().toString());
-  const msgJson = JSON.parse(message.toString());
-  console.log(msgJson);
+  data = message.toString().split(' ');
+  saveDataToFile(data[0], true)
+  saveDataToFile(data[1], false)
+  console.log(data[0], data[1]);
+
 });
 process.on("exit", () => {
   client.end();

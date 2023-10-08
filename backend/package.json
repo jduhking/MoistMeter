@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "mongodb": "^6.1.0",
+    "mongoose": "^7.6.0",
     "mqtt": "^5.1.0"
   }
 }
