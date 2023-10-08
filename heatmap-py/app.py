@@ -9,6 +9,15 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 
+@app.route('/get_floor_plan', methods=['GET'])
+def get_floor_plan():
+    #Get the parent directory of the current file
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    #Get the path to the floor plan picture
+    path = os.path.join(parent_dir, 'floor_plan_grid.png')
+    #Return the picture
+    return send_file(path, mimetype='image/png')
+
 sensor1_loc = (855, 367)
 sensor2_loc = (295, 360)
 

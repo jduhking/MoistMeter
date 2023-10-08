@@ -5,3 +5,40 @@
 :root {
   padding-inline: 100px;
 }
+.sensor1-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  top: 250px; /* Adjust this value to position the circle vertically */
+  left: 350px; /* Adjust this value to position the circle horizontally */
+  opacity: 0.8;
+  transform: translate(-50%, -50%); /* Center the circle */
+  transform-origin: center; /* Set the transform origin to the center */
+  transition: transform 0.3s ease-in-out,
+    background-color 0.3s ease-in-out; /* Add transitions for a smooth resize and color change effect */
+}
+
+.sensor2-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  top: 200px; /* Adjust this value to position the circle vertically */
+  left: 830px; /* Adjust this value to position the circle horizontally */
+  opacity: 0.8;
+  transform: translate(-50%, -50%); /* Center the circle */
+  transform-origin: center; /* Set the transform origin to the center */
+  transition: transform 0.3s ease-in-out,
+    background-color 0.3s ease-in-out; /* Add transitions for a smooth resize and color change effect */
+}
