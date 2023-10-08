@@ -44,23 +44,23 @@ export default function Chart({ data }: ChartProps) {
             bottom: 5,
           }}
         >
-          <XAxis dataKey="index" stroke="green" />
-          <YAxis stroke="green" domain={[0, 100]} />
+          <XAxis dataKey="index" stroke="#428FFC" />
+          <YAxis stroke="#428FFC" domain={[0, 100]} />
 
           <Tooltip />
 
           <Area
             type="monotone"
             dataKey="yAxisData"
-            fill="green"
-            stroke="green"
+            fill="#428FFC"
+            stroke="#428FFC"
             label=""
           />
 
           <ReferenceLine
             y={25}
             label=""
-            stroke="green"
+            stroke="#428FFC"
             strokeDasharray="3 3"
           />
         </AreaChart>

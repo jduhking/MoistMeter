@@ -4,7 +4,7 @@ export default function UpArrow() {
       xmlns="http://www.w3.org/2000/svg"
       width="28"
       height="28"
-      fill="red"
+      fill="#428FFC"
       className="bi bi-caret-up-fill"
       viewBox="0 0 16 16"
     >

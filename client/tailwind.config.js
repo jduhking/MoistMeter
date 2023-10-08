@@ -4,13 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "brdr-green": "#4DA167",
-        "brdr-green-30": "#4DA16720",
-        "brdr-green-40": "#4DA16740",
-        "brdr-green-50": "#4DA16750",
-        "brdr-green-60": "#4DA16760",
-        "text-green": "#4DA167",
-        stupid: "#ff0000",
+        "brdr-color": "#428FFC",
+        "brdr-color-30": "#428FFC20",
+        "brdr-color-40": "#428FFC40",
+        "brdr-color-50": "#428FFC50",
+        "brdr-color-60": "#428FFC60",
+        "text-color": "#428FFC",
       },
     },
   },

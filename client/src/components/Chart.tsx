@@ -11,62 +11,62 @@ import {
 const barData = [
   {
     orderMonth: 1,
-    xAxisMonth: "January",
-    yAxisData: 1,
-  },
-  {
-    orderMonth: 2,
-    xAxisMonth: "February",
-    yAxisData: 1,
-  },
-  {
-    orderMonth: 3,
-    xAxisMonth: "March",
-    yAxisData: 2,
-  },
-  {
-    orderMonth: 4,
-    xAxisMonth: "April",
-    yAxisData: 3,
-  },
-  {
-    orderMonth: 5,
-    xAxisMonth: "May",
-    yAxisData: 3,
-  },
-  {
-    orderMonth: 6,
-    xAxisMonth: "June",
-    yAxisData: 1,
-  },
-  {
-    orderMonth: 7,
-    xAxisMonth: "July",
-    yAxisData: 1,
-  },
-  {
-    orderMonth: 8,
-    xAxisMonth: "August",
-    yAxisData: 1,
-  },
-  {
-    orderMonth: 9,
-    xAxisMonth: "September",
-    yAxisData: 2,
-  },
-  {
-    orderMonth: 10,
-    xAxisMonth: "October",
-    yAxisData: 2,
-  },
-  {
-    orderMonth: 11,
     xAxisMonth: "November",
     yAxisData: 1,
   },
   {
-    orderMonth: 12,
+    orderMonth: 2,
     xAxisMonth: "December",
+    yAxisData: 1,
+  },
+  {
+    orderMonth: 3,
+    xAxisMonth: "January",
+    yAxisData: 2,
+  },
+  {
+    orderMonth: 4,
+    xAxisMonth: "February",
+    yAxisData: 3,
+  },
+  {
+    orderMonth: 5,
+    xAxisMonth: "March",
+    yAxisData: 3,
+  },
+  {
+    orderMonth: 6,
+    xAxisMonth: "April",
+    yAxisData: 1,
+  },
+  {
+    orderMonth: 7,
+    xAxisMonth: "May",
+    yAxisData: 1,
+  },
+  {
+    orderMonth: 8,
+    xAxisMonth: "June",
+    yAxisData: 1,
+  },
+  {
+    orderMonth: 9,
+    xAxisMonth: "July",
+    yAxisData: 2,
+  },
+  {
+    orderMonth: 10,
+    xAxisMonth: "August",
+    yAxisData: 2,
+  },
+  {
+    orderMonth: 11,
+    xAxisMonth: "September",
+    yAxisData: 1,
+  },
+  {
+    orderMonth: 12,
+    xAxisMonth: "October",
     yAxisData: 1,
   },
 ];
@@ -106,23 +106,23 @@ export default function Chart() {
             bottom: 5,
           }}
         >
-          <XAxis dataKey="xAxisMonth" stroke="green" />
-          <YAxis stroke="green" domain={[0, 10]} />
+          <XAxis dataKey="xAxisMonth" stroke="#428FFC" />
+          <YAxis stroke="#428FFC" domain={[0, 10]} />
 
           <Tooltip />
 
           <Area
             type="monotone"
             dataKey="yAxisData"
-            fill="green"
-            stroke="green"
+            fill="#428FFC"
+            stroke="#428FFC"
             label=""
           />
 
           <ReferenceLine
             y={getAverageYAxis()}
             label=""
-            stroke="green"
+            stroke="#428FFC"
             strokeDasharray="3 3"
           />
         </AreaChart>
