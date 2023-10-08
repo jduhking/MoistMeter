@@ -25,6 +25,10 @@ mqttClient.on("connect", function () {
 
   });
 });
+
+
+
+
 mqttClient.on("message", function (topic, message) {
   const d = new Date();
   console.log("Message recieved! " + d.getSeconds().toString());
