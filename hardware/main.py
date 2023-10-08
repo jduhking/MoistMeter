@@ -12,8 +12,8 @@ from umqtt import MQTTClient
 
 #config for the wood
 wood = ADC(Pin(26))
-min_moisture=0
-max_moisture=65535
+min_moisture=700
+max_moisture=54000
 
 # Fill in your Authentication and Feed MQTT Topic details
 mqtt_host = MQTT_BROKER_URL
@@ -59,6 +59,13 @@ def set_up_mqtt():
 
 def get_moisture_data():
     moisture=(max_moisture-wood.read_u16())*100/(max_moisture-min_moisture)
+    moisture= 100- moisture
+    if moisture < 0:
+        moisture = 0
+    elif moisture > 100:
+        moisture = 100
+    
+    print("moisture: " + "%.2f" % moisture +"% (adc: "+str(wood.read_u16())+")")
     return moisture
 
 
