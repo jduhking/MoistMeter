@@ -8,7 +8,9 @@ type ChartData = {
   yAxisData: number;
 };
 
-const socket = io(import.meta.env.VITE_API_URL as string);
+const socket = io(import.meta.env.VITE_API_URL as string, {
+  rejectUnauthorized: false,
+});
 console.log(import.meta.env.VITE_API_URL);
 const initialData: ChartData[] = [
   {

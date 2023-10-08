@@ -12,8 +12,6 @@
   "dependencies": {
     "autoprefixer": "^10.4.16",
     "buffer": "^6.0.3",
-    "mqtt": "^5.0.0-beta.4",
-    "mqtt-react": "^0.0.3",
     "object.omit": "^3.0.0",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
