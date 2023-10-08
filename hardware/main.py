@@ -11,7 +11,8 @@ import network
 from umqtt import MQTTClient
 
 #config for the wood
-wood = ADC(Pin(26))
+sensor1 = ADC(Pin(26))
+sensor2 = ADC(Pin(27))
 min_moisture=700
 max_moisture=54000
 
@@ -23,7 +24,8 @@ mqtt_publish_topic = "moistsensor"  # The MQTT topic for your Adafruit IO Feed
 
 # Enter a random ID for this MQTT Client
 # It needs to be globally unique across all of Adafruit IO.
-mqtt_client_id = "hardware_moist"
+mqtt_client_id = "wood_sensor_client"
+
 
 def connect_to_wifi():
     # Fill in your WiFi network name (ssid) and password here:
@@ -39,13 +41,13 @@ def connect_to_wifi():
         sleep(1)
     print("Connected to WiFi")
 
-def set_up_mqtt():
+def set_up_mqtt(client_id):
 
 
     # Initialize our MQTTClient and connect to the MQTT server
 
     mqtt_client = MQTTClient(
-            client_id=mqtt_client_id,
+            client_id=client_id,
             server=mqtt_host,
             user=mqtt_username,
             password=mqtt_password,
@@ -57,28 +59,30 @@ def set_up_mqtt():
     mqtt_client.connect()
     return mqtt_client
 
-def get_moisture_data():
-    moisture=(max_moisture-wood.read_u16())*100/(max_moisture-min_moisture)
+def get_moisture_data(sensor):
+    moisture=(max_moisture-sensor.read_u16())*100/(max_moisture-min_moisture)
     moisture= 100- moisture
     if moisture < 0:
         moisture = 0
     elif moisture > 100:
         moisture = 100
     
-    print("moisture: " + "%.2f" % moisture +"% (adc: "+str(wood.read_u16())+")")
+    print("moisture: " + "%.2f" % moisture +"% (adc: "+str(sensor.read_u16())+")")
     return moisture
 
 
 try:
     connect_to_wifi()
-    mqtt_client = set_up_mqtt()
+    mqtt_client = set_up_mqtt(mqtt_client_id)
     
     while True:
         # Generate some dummy data that changes every loop
-        moisture = get_moisture_data()
+        moisture_data1 = get_moisture_data(sensor1)
+        moisture_data2 = get_moisture_data(sensor2)
         
         print(f'Publish {moisture:.2f}')
-        mqtt_client.publish(mqtt_publish_topic, str(moisture))
+        data = str(moisture_data1) + " " + str(moisture_data2)
+        mqtt_client.publish(mqtt_publish_topic, data)
         
         # Delay a bit to avoid hitting the rate limit
         sleep(2)
@@ -86,3 +90,4 @@ except Exception as e:
     print(f'Failed to publish message: {e}')
 finally:
     mqtt_client.disconnect()
+
