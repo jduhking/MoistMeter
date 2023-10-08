@@ -13,7 +13,10 @@ export default function FloorPlan() {
   const sensor1CircleRef = useRef<HTMLDivElement>(null);
   const sensor2CircleRef = useRef<HTMLDivElement>(null);
 
-  function updateCircles(sensor1Val, sensor2Val) {
+  function updateCircles(
+    sensor1Val: number,
+    sensor2Val: number
+  ) {
     let circle1Color = "green";
     let circle2Color = "green";
     const scaleFactor = 0.4; // Adjust the scaling factor as needed
