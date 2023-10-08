@@ -20,6 +20,7 @@ const io = new Server(server, {
 });
 
 const mqttClient = newMqttClient();
+
 // Set up a Socket.io connection event handler
 io.on("connection", (socket) => {
   console.log("A user connected");
